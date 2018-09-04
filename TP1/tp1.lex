@@ -7,21 +7,18 @@ import java.io.IOException;
 import java.lang.System.*;
 
 %%
+%class lexAnalysis
 %standalone
 
 %{ 
-    String EXIT_FILE = "/home/marcel/Desktop/Compiladores/TP1/tokens.txt";
-
-    FileWriter fw = null;
-    BufferedWriter bw = null;
+    String EXIT_FILE = "tokens.txt";
+    FileWriter fw = new FileWriter(EXIT_FILE);
+    BufferedWriter bw = new BufferedWriter(fw);
     
-
 %}
 
 %init{
-    //FileWriter fw = new FileWriter(EXIT_FILE);
-    BufferedWriter bw = new BufferedWriter(new FileWriter(EXIT_FILE));
-    
+       
 %init}
 
 %initthrow{
@@ -30,7 +27,7 @@ import java.lang.System.*;
 
 %eof{
     bw.close();
-    //fw.close();
+    fw.close();
 %eof}
 
 %eofthrow{
@@ -40,197 +37,198 @@ import java.lang.System.*;
 
 %%
 
-[ \t\r\f] { /*eliminando espacos em branco*/
+[\t| |\r|\f|] { /*eliminando espacos em branco*/
     System.out.print(yytext());
 }
 
 [\n] {
     System.out.print(yytext());
-    bw.write(yytext());     
+   bw.write(yytext());     
 }
 
 "begin" {
     System.out.print(yytext());
-    bw.write("<"+ "begin, >");
+   bw.write("<"+ "begin, >");
 }
 
 "end" {
     System.out.print(yytext());
-    bw.write("<"+ "end, >");
+   bw.write("<"+ "end, >");
 }
 
 ";" {
     System.out.print(yytext());
-    bw.write("<"+ "scolon, >");
+   bw.write("<"+ "scolon, >");
 }
 
 
 "(" {
     System.out.print(yytext());
-    bw.write("<"+ "lfparen, >");
+   bw.write("<"+ "lfparen, >");
 }
 
 ")" {
     System.out.print(yytext());
-    bw.write("<"+ "rtparen, >");
+   bw.write("<"+ "rtparen, >");
 }
 
 (int) {
     System.out.print(yytext());
-    bw.write("<" + "type,"+ yytext()+">");
+   bw.write("<" + "type,"+ yytext()+">");
 }
+
 (real) {
     System.out.print(yytext());
-    bw.write("<" + "type,"+ yytext()+">");
+   bw.write("<" + "type,"+ yytext()+">");
 }
 
 (boolean) {
     System.out.print(yytext());
-    bw.write("<" + "type,"+ yytext()+">");
+   bw.write("<" + "type,"+ yytext()+">");
 }
 
 (char) {
     System.out.print(yytext());
-    bw.write("<" + "type,"+ yytext()+">");
+   bw.write("<" + "type,"+ yytext()+">");
 }
 
 "=" {
     System.out.print(yytext());
-    bw.write("<"+ "assign," + yytext()+">");
+   bw.write("<"+ "assign," + yytext()+">");
 
 }
 
 (while) {
     System.out.print(yytext());
-    bw.write("<"+ "while, >");
+   bw.write("<"+ "while, >");
 }
 
 (if) {
     System.out.print(yytext());
-    bw.write("<" +"if, >" );
+   bw.write("<" +"if, >" );
 }
 
 (else) {
     System.out.print(yytext());
-    bw.write("<"+"else, >");
+   bw.write("<"+"else, >");
 }
 
 (then) {
     System.out.print(yytext());
-    bw.write("<"+"then, >");
+   bw.write("<"+"then, >");
 }
 
 (repeat) {
     System.out.print(yytext());
-    bw.write("<"+ "repeat, >");
+   bw.write("<"+ "repeat, >");
 }
 
 (until) {
     System.out.print(yytext());
-    bw.write("<"+"until, >");
+   bw.write("<"+"until, >");
 }
 
 (read) {
     System.out.print(yytext());
-    bw.write("<"+"read, >");
+   bw.write("<"+"read, >");
 }
 (write) {
     System.out.print(yytext());
-    bw.write("<"+"write, >");
+   bw.write("<"+"write, >");
 }
 
 
 (false) {
     System.out.print(yytext());
-    bw.write("<"+"bool,"+yytext()+">");
+   bw.write("<"+"bool,"+yytext()+">");
 }
 
 (true) {
     System.out.print(yytext());
-    bw.write("<"+"bool,"+yytext()+">");
+   bw.write("<"+"bool,"+yytext()+">");
 }
 
 (value) {
     System.out.print(yytext());
-    bw.write("<"+"value, >");
+   bw.write("<"+"value, >");
 }
 (reference) {
     System.out.print(yytext());
-    bw.write("<"+"reference, >");
+   bw.write("<"+"reference, >");
 }
 
 
 [A-Za-z][A-za-z0-9]* {
     System.out.print(yytext());
-    bw.write("<"+"id,"+yytext()+">");
+   bw.write("<"+"id,"+yytext()+">");
 }
 
 "<" {
     System.out.print(yytext());
-    bw.write("<"+"relop,"+ yytext()+">");
+   bw.write("<"+"relop,"+ yytext()+">");
 }
 
 ">" {
     System.out.print(yytext());
-    bw.write("<"+"relop,"+ yytext()+">");
+   bw.write("<"+"relop,"+ yytext()+">");
 }
 
 "<=" {
     System.out.print(yytext());
-    bw.write("<"+ "relop," + yytext()+ ">");
+   bw.write("<"+ "relop," + yytext()+ ">");
 }
 ">=" {
     System.out.print(yytext());
-    bw.write("<" + "relop,"+yytext()+">");
+   bw.write("<" + "relop,"+yytext()+">");
 }
 
 "!=" {
     System.out.print(yytext());
-    bw.write("<"+ "relop," + yytext()+ ">");
+   bw.write("<"+ "relop," + yytext()+ ">");
 }
 
 "*" {
     System.out.print(yytext());
-    bw.write("<" + "mulop,"+yytext()+">");
+   bw.write("<" + "mulop,"+yytext()+">");
 }
 
 "/" {
     System.out.print(yytext());
-    bw.write("<"+"mulop,"+yytext()+">");
+   bw.write("<"+"mulop,"+yytext()+">");
 }
 (mod) {
     System.out.print(yytext());
-    bw.write("<"+"mulop,"+yytext()+">");
+   bw.write("<"+"mulop,"+yytext()+">");
 }
 
 (and) {
     System.out.print(yytext());
-    bw.write("<"+"mulop,"+yytext()+">");
+   bw.write("<"+"mulop,"+yytext()+">");
 }
 
 "+" {
     System.out.print(yytext());
-    bw.write("<"+"addop,"+yytext()+">");
+   bw.write("<"+"addop,"+yytext()+">");
 }
 
 "-" {
     System.out.print(yytext());
-    bw.write("<"+"addop,"+yytext()+">");
+   bw.write("<"+"addop,"+yytext()+">");
 }
 
 (or) {
     System.out.print(yytext());
-    bw.write("<"+"addop,"+yytext()+">");
+   bw.write("<"+"addop,"+yytext()+">");
 }
 
 [+|-]?[0-9]*[.][0-9]+([E|e][+|-]?[0-9]+)? { //Real
     System.out.print(yytext());
-    bw.write("<" + "num,"+ yytext()+">");
+   bw.write("<" + "num,"+ yytext()+">");
 }
 
 [+|-]?[0-9]+([E|e][+|-]?[0-9]+)? { //inteiro
     System.out.print(yytext());
-    bw.write("<"+"num,"+yytext()+">");
+   bw.write("<"+"num,"+yytext()+">");
 }
 
 . {
