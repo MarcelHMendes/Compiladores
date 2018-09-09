@@ -1,0 +1,93 @@
+import java_cup.runtime.*;
+
+parser code{:
+	public static void main(Strings args[]) throws Exception {
+		System.out.println("-----------------");
+		parser myParser = new parser(new Yylex(System.in));
+		System.out.print("Accepted");
+	}
+:};
+terminal LFPAREN, RTPAREN, SCOLON, BEGIN, END;
+terminal INTT, CHART, BOOLEANT, REALT;
+terminal ASSIGN,COLON,COMMA;
+terminal WHILE, IF, ELSE,THEN,UNTIL,REPEAT;
+
+terminal ID;
+
+terminal LT,LD,GT,GE;
+terminal PLUS, MINUS, MUL, DIV;
+
+non terminal programI,program, decl_list, decl, dcl_var, indent_list,type;
+non terminal tipo_retornado,corpo,id_return,espec_parametros;
+non terminal lista_de_parametros,parametro,modo,compound_stmt,stmt_list;
+non terminal assign_stmt, if_stmt, cond,repeat_stmt, read_stmt;
+non terminal write_stmt,expr_list,expr, Simple_expr, term,factor_a;
+non terminal factor, function_ref_par,variable, Simple_variable_or_proc;
+non terminal constant, boolean_constant,dcl_proc;
+
+precedence left PLUS, MINUS, MUL, DIV, ELSE;
+
+
+programI ::= program:p {:
+	System.out.println("-----------");
+	String regras = new String("programI -> program\n" + p);
+	System.out.print(rules);
+:};
+program ::=  ID SCOLON decl_list:dl compound_stmt:cs {:
+	RESULTADO = new String("program -> ID decl_list compund_stmt\n" + dl + cs);
+
+:};
+decl_list ::= decl_list:dl SCOLON  decl:dc {:
+		RESULTADO = new String("decl_list -> decl_list ; decl\n" + dl+ dc);
+	:};
+	| decl:dc {:
+		RESULTADO = new String("decl_list -> decl\n" + dc);
+	:};
+decl ::= dcl_var:dv {:
+		RESULTADO = new String("decl -> decl_var\n" + dv);	
+	:};
+	| dcl_proc:dp {:
+		RESULTADO = new String("decl -> decl_proc\n" + dp);
+	:};
+dcl_var ::= ident_list:il COLON type:t {:
+	RESULTADO = new String("dcl_var -> type\n"+il+t);
+:};
+ident_list ::= ident_list:il COMMA 	ID {:
+		RESULTADO =  new String("ident_list ->  ident_list : id\n" + il);
+	:};	|	ID {:
+			RESULTADO = new String("ident_list -> id\n");	
+	:}		
+type ::= INTT {:
+		RESULTADO = new String("type -> integer\n");
+	:};	
+	| REALT {:
+		RESULTADO = new String("type -> real\n");	
+	:};
+	| BOOLEANT {:
+		RESULTADO = new String("type -> boolean\n");
+	:};
+	| CHAR {:
+		RESULTADO = new String("type -> char\n");
+	:};
+dcl_proc ::= tipo_retornado:tr PROCEDURE ID espec_parametros:ep corpo:c {:
+		RESULTADO = new String("dcl_proc -> tipo_retornado procedure id espec_parametros\n" +tr+ep+c);
+	:}	 
+
+tipo_retornado ::= INTT {:
+		RESULTADO = new String("type -> integer\n");
+	:};	
+	| REALT {:
+		RESULTADO = new String("type -> real\n");	
+	:};
+	| BOOLEANT {:
+		RESULTADO = new String("type -> boolean\n");
+	:};
+	| CHAR {:
+		RESULTADO = new String("type -> char\n");
+	:};
+	| /* vazio */ {:
+			RESULTADO = new String("tipo_retornado -> \n\n");	
+	:};
+corpo ::= COLON decl_list:dl SCOLON compound_stmt id_return {:
+
+	:};
