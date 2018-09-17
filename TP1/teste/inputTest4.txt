@@ -1,0 +1,5 @@
+program cond;
+begin
+	if k < 2 then write("ok"); 
+end
+

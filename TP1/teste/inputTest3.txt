@@ -1,0 +1,5 @@
+program OlaMundo;
+begin
+	write ("ola mundo");
+end
+

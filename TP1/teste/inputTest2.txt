@@ -1,0 +1,3 @@
+int k = 3;
+repeat (3) begin
+end
