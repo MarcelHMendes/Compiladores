@@ -1,7 +1,7 @@
 import java_cup.runtime.*;
 
 parser code{:
-	public static void main(Strings args[]) throws Exception {
+	public static void main(String args[]) throws Exception {
 		System.out.println("-----------------");
 		parser myParser = new parser(new Yylex(System.in));
 		System.out.print("Accepted");
@@ -11,16 +11,17 @@ terminal LFPAREN, RTPAREN, SCOLON, BEGIN, END;
 terminal INTT, CHART, BOOLEANT, REALT;
 terminal ASSIGN,COLON,COMMA;
 terminal WHILE, IF, ELSE,THEN,UNTIL,REPEAT;
+terminal READ,WRITE;
+terminal ID,VALUE,REFERENCE;
+terminal NOT,FALSE,TRUE
 
-terminal ID;
-
-terminal LT,LD,GT,GE;
-terminal PLUS, MINUS, MUL, DIV;
+terminal LT,LE,GT,GE,EQ,NQ;
+terminal PLUS, MINUS, MUL, DIV,OR,MOD,AND;
 
 non terminal programI,program, decl_list, decl, dcl_var, indent_list,type;
 non terminal tipo_retornado,corpo,id_return,espec_parametros;
 non terminal lista_de_parametros,parametro,modo,compound_stmt,stmt_list;
-non terminal assign_stmt, if_stmt, cond,repeat_stmt, read_stmt;
+non terminal assign_stmt, if_stmt, cond,repeat_stmt, read_stmt,stmt;
 non terminal write_stmt,expr_list,expr, Simple_expr, term,factor_a;
 non terminal factor, function_ref_par,variable, Simple_variable_or_proc;
 non terminal constant, boolean_constant,dcl_proc;
@@ -34,7 +35,7 @@ programI ::= program:p {:
 	System.out.print(rules);
 :};
 program ::=  ID SCOLON decl_list:dl compound_stmt:cs {:
-	RESULTADO = new String("program -> ID decl_list compund_stmt\n" + dl + cs);
+	RESULTADO = new String("program -> ID decl_list compound_stmt\n" + dl + cs);
 
 :};
 decl_list ::= decl_list:dl SCOLON  decl:dc {:
@@ -57,13 +58,13 @@ ident_list ::= ident_list:il COMMA 	ID {:
 	:};	|	ID {:
 			RESULTADO = new String("ident_list -> id\n");	
 	:}		
-type ::= INTT {:
+type ::= INT {:
 		RESULTADO = new String("type -> integer\n");
 	:};	
-	| REALT {:
+	| REAL {:
 		RESULTADO = new String("type -> real\n");	
 	:};
-	| BOOLEANT {:
+	| BOOLEAN {:
 		RESULTADO = new String("type -> boolean\n");
 	:};
 	| CHAR {:
@@ -73,13 +74,13 @@ dcl_proc ::= tipo_retornado:tr PROCEDURE ID espec_parametros:ep corpo:c {:
 		RESULTADO = new String("dcl_proc -> tipo_retornado procedure id espec_parametros\n" +tr+ep+c);
 	:}	 
 
-tipo_retornado ::= INTT {:
+tipo_retornado ::= INT {:
 		RESULTADO = new String("type -> integer\n");
 	:};	
-	| REALT {:
+	| REAL {:
 		RESULTADO = new String("type -> real\n");	
 	:};
-	| BOOLEANT {:
+	| BOOLEAN {:
 		RESULTADO = new String("type -> boolean\n");
 	:};
 	| CHAR {:
@@ -88,6 +89,189 @@ tipo_retornado ::= INTT {:
 	| /* vazio */ {:
 			RESULTADO = new String("tipo_retornado -> \n\n");	
 	:};
-corpo ::= COLON decl_list:dl SCOLON compound_stmt id_return {:
-
+corpo ::= COLON decl_list:dl SCOLON compound_stmt:cs id_return:ir {:
+		RESULTADO = new String("corpo -> : decl_list ; compound_stmt id_return\n" + dl+cs+ir);
 	:};
+	| /* vazio */ {:
+		RESULTADO = new String("corpo -> \n\n");
+	:};
+id_return ::= ID {:
+		RESULTADO = new String("id_return -> id\n");
+	:};
+	| 	/* vazio */ {:
+		RESULTADO = new String("id_return -> \n\n");
+	:};
+
+espec_parametros ::= LFPAREN lista_de_parametros:lp RTPAREN {:
+		RESULTADO = new String("espec_parametros -> ( lista_de_parametros )\n"+ lp);
+	:};
+lista_de_parametros ::= parametro:p {:
+		RESULTADO = new String("lista_de_parametros -> parametro\n"+ p);
+	:};
+	| lista_de_parametros:lp COMMA parametro:p {:
+		RESULTADO = new String("lista_de_parametros -> lista_de_parametros , parametro\n"+ lp+ p);
+	:}; 
+parametro ::= modo:m type:t COLON ID {:
+		RESULTADO = new String("parametro -> modo type : id\n"+m+t);
+	:};
+modo ::= VALUE {:
+		RESULTADO = new String("modo -> value\n");
+	:};
+	| REFERENCE {:
+		RESULTADO = new String("modo -> reference\n");
+	:};
+compound_stmt ::= BEGIN stmt_list:sl END {:
+		RESULTADO = new String("compound_stmt -> begin stmt_list end\n"+sl);
+	:};
+stmt_list ::= stmt_list:sl SCOLON stmt:s {:
+		RESULTADO = new String("stmt_list -> stmt_list ; stmt\n"+sl+s);
+	:} 
+	| stmt:s {:
+		RESULTADO = new String("stmt_list -> stmt\n"+s);
+	:};
+stmt ::= assign_stmt:as {:
+		RESULTADO = new String("stmt -> assign_stmt\n"+as);
+	:};
+	| if_stmt:is{:
+		RESULTADO = new String("stmt -> if_stmt\n"+is);
+	:};
+	| repeat_stmt:rs {:
+		RESULTADO = new String("stmt -> repeat_stmt\n"+ rs);
+	:};
+	| read_stmt:rds {:
+		RESULTADO = new String("stmt -> read_stmt\n"+rds);
+	:};
+	| write_stmt:ws {:
+		RESULTADO = new String("stmt -> write_stmt\n"+ ws);
+	:};
+	| compound_stmt:cs {:
+		RESULTADO = new String("stmt -> compound_stmt\n"+cs);
+	:};
+	| function_ref_par:frp {:
+		RESULTADO = new String("stmt -> function_ref_par\n"+frp);
+	:};
+assign_stmt ::= ID ASSIGN expr:e {:
+		RESULTADO = new String("assign_stmt -> id := expr\n"+e);
+	:};
+if_stmt ::= IF cond:c THEN stmt:s {:
+		RESULTADO = new String("if_stmt -> if cond then stmt\n"+c+s);
+	:};
+	| IF cond:c THEN stmt:s1 ELSE stmt:s2 {:
+			RESULTADO = new String("if_stmt -> if cond then stmt else stmt\n"+c+s1+s2);
+	:};
+cond ::= expr:e {:
+		RESULTADO = new String("cond -> expr\n"+e);
+	:};
+repeat_stmt ::= REPEAT stmt_list:st UNTIL expr:e {:
+		RESULTADO = new String("repeat_stmt -> repeat stmt_list until expr\n"+st+e);
+	:};
+read_stmt ::= READ LFPAREN ident_list:il RTPAREN {:
+		RESULTADO = new String("read_stmt -> read( ident_list )\n"+il);
+	:};
+write_stmt ::= WRITE LFPAREN expr_list:el RTPAREN	{:
+		RESULTADO = new String("write_stmt -> ( expr_list )\n"+el);
+	:};
+expr_list ::= expr:e {:
+		RESULTADO = new String("expr_list -> expr\n"+e);
+	:};
+	| expr_list:el COMMA expr:e {:
+		RESULTADO = new String("expr_list -> expr_list , expr\n"+el+e);
+	:};
+expr ::= Simple_expr:se {:
+		RESULTADO = new String("expr -> Simple_expr\n"+se);
+	:};
+	| Simple_expr:se1 LE Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr LE Simple_expr \n"+se1+se2);
+	:}; 
+	| Simple_expr:se1 LT Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr LT Simple_expr \n"+se1+se2);
+	:}; 
+	| Simple_expr:se1 GE Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr GE Simple_expr \n"+se1+se2);
+	:}; 
+	| Simple_expr:se1 GT Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr GT Simple_expr \n"+se1+se2);
+	:}; 
+	| Simple_expr:se1 EQ Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr EQ  Simple_expr \n"+se1+se2);
+	:}; 
+	| Simple_expr:se1 NE Simple_expr:se2 {:
+		RESULTADO = new String("expr -> Simple_expr LE Simple_expr \n"+se1+se2);
+	:}; 
+
+Simple_expr ::= term:t {:
+			RESULTADO = new String("Simple_expr -> term\n"+t);
+	:};
+	| Simple_expr:se PLUS term:t {:
+		RESULTADO = new String("Simple_expr -> Simple_expr + term"+se+t);
+	:};
+	| Simple_expr:se MINUS term:t {:
+		RESULTADO = new String("Simple_expr -> Simple_expr - term"+se+t);
+	:};
+	| Simple_expr:se OR term:t {:
+		RESULTADO = new String("Simple_expr -> Simple_expr or term"+se+t);
+	:};
+term ::= factor_a:fa {:
+		RESULTADO = new String("term -> factor_a\n"+fa);
+	:};
+	| term:t MUL factor_a:fa {:
+		RESULTADO = new String("term -> term * factor_a\n"+t+fa);
+	:};
+	| term:t DIV factor_a:fa {:
+		RESULTADO = new String("term -> term / factor_a\n"+t+fa);
+	:};
+	| term:t AND factor_a:fa {:
+		RESULTADO = new String("term -> term and factor_a\n"+t+fa);
+	:};
+	| term:t MOD factor_a:fa {:
+		RESULTADO = new String("term -> term mod factor_a\n"+t+fa);
+	:};
+	
+factor_a ::= MINUS factor:f {:
+	RESULTADO = new String("factor_a -> - factor\n"+f);
+:};
+| factor:f {:
+	RESULTADO = new String("factor_a -> factor\n"+f);
+:};
+
+factor ::= ID {:
+	RESULTADO = new  String("factor -> id");
+:};
+| constant:c {:
+	RESULTADO = new String("factor -> constant\n");
+:}; 
+| LFPAREN expr:e RTPAREN {:
+	RESULTADO = new String("factor -> ( expr )\n"+e);
+:};
+| NOT factor:f {:
+	RESULTADO = new String("factor -> not factor\n"+f);
+:};
+| function_ref_par:frp {:
+	RESULTADO = new String("factor -> function_ref_par\n"+frp);
+:};
+variable ::= Simple_variable_or_proc:svp {:
+	RESULTADO = new String("factor -> Simple_variable_or_proc\n"+svp);
+:};
+Simple_variable_or_proc ::= ID {:
+	RESULTADO = new String("Simple_variable_or_proc -> id\n");
+:};
+constant ::= INTT {:
+	RESULTADO = new String("constant -> integer_constant\n");
+:};
+| REALT {:
+	RESULTADO = new String("constant -> real_constant\n");
+:};
+| boolean_constant {:
+	RESULTADO = new String("constant -> boolean_constant\n");
+:};
+| CHART {:
+	RESULTADO = new String("constant -> char_constant\n");
+:};
+
+boolean_constant ::= FALSE {:
+	RESULTADO = String("boolean_constant -> false\n");
+:};
+| TRUE {:
+	RESULTADO = new String("boolean_constant -> true\n");
+:};
+

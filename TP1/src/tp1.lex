@@ -61,6 +61,15 @@ import java.lang.System.*;
    bw.write("<"+ "scolon, >");
 }
 
+":" {
+	System.out.print(yytext());
+	bw.write("<"+"colon, >");
+}	
+
+"," {
+	System.out.print(yytext());
+	bw.write("<"+"comma, >");
+}
 
 "(" {
     System.out.print(yytext());
@@ -88,34 +97,34 @@ import java.lang.System.*;
 }
 
 (char) {
-    System.out.print(yytext());
-   bw.write("<" + "type,"+ yytext()+">");
+  System.out.print(yytext());
+  bw.write("<" + "type,"+ yytext()+">");
 }
 
-"=" {
-    System.out.print(yytext());
-   bw.write("<"+ "assign," + yytext()+">");
+":=" {
+  System.out.print(yytext());
+  bw.write("<"+ "assign," + yytext()+">");
 
 }
 
 (while) {
-    System.out.print(yytext());
-   bw.write("<"+ "while, >");
+  System.out.print(yytext());
+  bw.write("<"+ "while, >");
 }
 
 (if) {
-    System.out.print(yytext());
-   bw.write("<" +"if, >" );
+  System.out.print(yytext());
+  bw.write("<" +"if, >" );
 }
 
 (else) {
-    System.out.print(yytext());
-   bw.write("<"+"else, >");
+  System.out.print(yytext());
+  bw.write("<"+"else, >");
 }
 
 (then) {
-    System.out.print(yytext());
-   bw.write("<"+"then, >");
+  System.out.print(yytext());
+  bw.write("<"+"then, >");
 }
 
 (repeat) {
@@ -157,6 +166,11 @@ import java.lang.System.*;
    bw.write("<"+"reference, >");
 }
 
+(not) {
+   System.out.print(yytext());
+   bw.write("<"+"not, >"); 
+}
+
 
 [A-Za-z][A-za-z0-9]* {
     System.out.print(yytext());
@@ -186,7 +200,11 @@ import java.lang.System.*;
     System.out.print(yytext());
    bw.write("<"+ "relop," + yytext()+ ">");
 }
+"="{
 
+  System.out.print(yytext());
+   bw.write("<"+ "relop," + yytext()+ ">");
+}
 "*" {
     System.out.print(yytext());
    bw.write("<" + "mulop,"+yytext()+">");
