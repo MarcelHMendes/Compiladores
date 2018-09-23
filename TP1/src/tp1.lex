@@ -1,7 +1,7 @@
 
 package lexsyn;
 
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import java.lang.System.*;
 
 %%
 %cup
+//%class lexAn
+//%standalone
 %{ 
     String EXIT_FILE = "tokens.txt";
     FileWriter fw = new FileWriter(EXIT_FILE);
@@ -36,7 +38,7 @@ import java.lang.System.*;
 
 %%
 
-[\t| |\r|\f|] { /*eliminando espacos em branco*/
+[ \t\r\f] { /*eliminando espacos em branco*/
     System.out.print(yytext());
 }
 
@@ -61,8 +63,14 @@ import java.lang.System.*;
 (end) {
     System.out.print(yytext());
    bw.write("<"+ "end, >");
-      return new Symbol(sym.END);
+   return new Symbol(sym.END);
 
+}
+
+(procedure) {
+	System.out.print(yytext());
+   bw.write("<"+ "procedure, >");
+   return new Symbol(sym.PROCEDURE);
 }
 
 ";" {
@@ -75,14 +83,14 @@ import java.lang.System.*;
 ":" {
 	System.out.print(yytext());
 	bw.write("<"+"colon, >");
-  return new Symbol(sym.COLON);
+  	return new Symbol(sym.COLON);
 
 }	
 
 "," {
 	System.out.print(yytext());
 	bw.write("<"+"comma, >");
-  return new Symbol(sym.COMMA);
+ 	return new Symbol(sym.COMMA);
 
 }
 
@@ -140,7 +148,6 @@ import java.lang.System.*;
   System.out.print(yytext());
   bw.write("<" +"if, >" );
   return new Symbol(sym.IF);
-
 }
 
 (else) {
@@ -233,6 +240,7 @@ import java.lang.System.*;
 [A-Za-z][A-za-z0-9]* {
     System.out.print(yytext());
    bw.write("<"+"id,"+yytext()+">");
+   return new Symbol(sym.ID);
 }
 
 "<" {
@@ -303,11 +311,13 @@ import java.lang.System.*;
 [+|-]?[0-9]*[.][0-9]+([E|e][+|-]?[0-9]+)? { //Real
   System.out.print(yytext());
   bw.write("<" + "num,"+ yytext()+">");
+  return new Symbol(sym.REALT, new Double(yytext()));
 }
 
 [+|-]?[0-9]+([E|e][+|-]?[0-9]+)? { //inteiro
     System.out.print(yytext());
    bw.write("<"+"num,"+yytext()+">");
+   return new Symbol(sym.INTT, new Integer(yytext()));
 }
 
 . {

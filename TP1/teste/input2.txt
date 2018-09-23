@@ -1,0 +1,10 @@
+program test;
+var1 : int;
+var2 : int;
+begin
+     int procedure(x:int , y:int)
+	begin 
+	    var1 := x + y;
+	    var2 := x - y;	
+	end	
+end

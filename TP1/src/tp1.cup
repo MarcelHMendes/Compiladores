@@ -2,12 +2,13 @@ package lexsyn;
 
 import java_cup.runtime.*;
 
+
 parser code {:
 	public static void main(String args[]) throws Exception {
 		System.out.println("-----------------");
 		parser myParser = new parser(new Yylex(System.in));
 		myParser.parse();
-		System.out.print("Accepted");
+		System.out.print("\nAccepted");
 	}
 :};
 terminal LFPAREN, RTPAREN, SCOLON, BEGIN, END, PROGRAM;
@@ -22,25 +23,27 @@ terminal NOT,FALSE,TRUE;
 terminal LT,LE,GT,GE,EQ,NQ;
 terminal PLUS, MINUS, MUL, DIV,OR,MOD,AND;
 
-non terminal programI,program, decl_list, decl, dcl_var, indent_list,type;
+non terminal program, decl_list, decl, dcl_var, indent_list,type;
 non terminal tipo_retornado,corpo,id_return,espec_parametros; 
 non terminal lista_de_parametros,parametro,modo,compound_stmt,stmt_list;
 non terminal assign_stmt, if_stmt, cond,repeat_stmt, read_stmt,stmt;
 non terminal write_stmt,expr_list,expr, Simple_expr, term,factor_a;
-non terminal factor, function_ref_par;
-non terminal constant, boolean_constant,dcl_proc;
+non terminal factor, function_ref_par,Simple_variable_or_proc;
+non terminal constant, boolean_constant,dcl_proc,variable;
 
-precedence left PLUS, MINUS, MUL, DIV, ELSE;
+precedence left PLUS, MINUS, MUL, DIV, ELSE,MOD;
 
 
-programI ::= program:p {:
+/*programI ::= program:p {:
 	System.out.println("-----------");
 	String regras = new String("programI -> program\n" + p);
 	System.out.print(regras);
-:};
+:};*/
 program ::= PROGRAM ID SCOLON decl_list:dl compound_stmt:cs {:
-	String RESULTADO = new String("program -> ID decl_list compound_stmt\n" + dl + cs);
-
+	System.out.println("-----------");
+	String regras = new String("program -> program ID decl_list compound_stmt\n" + dl + cs);
+	//String regras = new String("programI -> program\n" + p);
+	System.out.print(regras);
 :};
 decl_list ::= decl_list:dl SCOLON  decl:dc {:
 		String RESULTADO = new String("decl_list -> decl_list ; decl\n" + dl+ dc);
@@ -55,12 +58,13 @@ decl ::= dcl_var:dv {:
 		String RESULTADO = new String("decl -> decl_proc\n" + dp);
 	:};
 dcl_var ::= indent_list:il COLON type:t {:
-	String RESULTADO = new String("dcl_var -> type\n"+il+t);
+	String RESULTADO = new String("dcl_var -> ident_list : type\n"+il+t);
 :};
- indent_list ::= indent_list:il COMMA 	ID {:
-		String RESULTADO =  new String(" ->   : id\n" + il);
-	:}	|	ID {:
-			String RESULTADO = new String(" -> id\n");	
+ indent_list ::= indent_list:il COMMA ID {:
+		String RESULTADO =  new String("indent_list ->   : id\n" + il);
+	:}	
+	|	ID {:
+			String RESULTADO = new String("indent_list -> id\n");	
 	:};		
 type ::= INT {:
 		String RESULTADO = new String("type -> integer\n");
@@ -132,11 +136,15 @@ stmt_list ::= stmt_list:sl SCOLON stmt:s {:
 	:} 
 	| stmt:s {:
 		String RESULTADO = new String("stmt_list -> stmt\n"+s);
+	:}
+	| /*vazio*/ {:
+		String RESULTADO = new String("stmt_list -> \n\n");
 	:};
+
 stmt ::= assign_stmt:as {:
 		String RESULTADO = new String("stmt -> assign_stmt\n"+as);
 	:}
-	| if_stmt:is{:
+	| if_stmt:is {:
 		String RESULTADO = new String("stmt -> if_stmt\n"+is);
 	:}
 	| repeat_stmt:rs {:
@@ -169,7 +177,7 @@ cond ::= expr:e {:
 repeat_stmt ::= REPEAT stmt_list:st UNTIL expr:e {:
 		String RESULTADO = new String("repeat_stmt -> repeat stmt_list until expr\n"+st+e);
 	:};
-read_stmt ::= READ LFPAREN :il RTPAREN {:
+read_stmt ::= READ LFPAREN indent_list:il RTPAREN {:
 		String RESULTADO = new String("read_stmt -> read(  )\n"+il);
 	:};
 write_stmt ::= WRITE LFPAREN expr_list:el RTPAREN	{:
@@ -253,12 +261,17 @@ factor ::= ID {:
 | function_ref_par:frp {:
 	String RESULTADO = new String("factor -> function_ref_par\n"+frp);
 :};
-/*Simple_variable_or_proc ::= ID {:
+
+Simple_variable_or_proc ::= ID {:
 	String RESULTADO = new String("Simple_variable_or_proc -> id\n");
 :};
-variable ::= ID {:
-	String RESULTADO = new String("factor -> Simple_variable_or_proc\n"+svp);
-:};*/
+
+function_ref_par ::= variable:v LFPAREN expr_list:el RTPAREN {:
+	String RESULTADO = new String("function_ref_par -> varialbe (expr_list)"+v+el);
+:};
+variable ::= Simple_variable_or_proc {:
+	String RESULTADO = new String("variable -> Simple_variable_or_proc\n");
+:};
 
 constant ::= INTT {:
 	String RESULTADO = new String("constant -> integer_constant\n");
