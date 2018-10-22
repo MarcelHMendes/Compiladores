@@ -1,11 +1,13 @@
 program cond ;
 v : int ;
 v1 : real ;
-k : int ;
+k : int 
 begin
-	read(v,v1);
+	read(v,v1);	
 	write( ok );
-	if k > 0 then	
-	   k := 0;
+	if k > 0 then
+	begin		
+	   k := 0 
+	end	
 end
 

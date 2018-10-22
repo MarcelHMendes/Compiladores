@@ -8,7 +8,7 @@ parser code {:
 		System.out.println("-----------------");
 		parser myParser = new parser(new Yylex(System.in));
 		myParser.parse();
-		System.out.print("\nAccepted");
+		System.out.print("Accepted");
 	}
 :};
 terminal LFPAREN, RTPAREN, SCOLON, BEGIN, END, PROGRAM;
@@ -41,255 +41,337 @@ precedence left PLUS, MINUS, MUL, DIV, ELSE,MOD;
 :};*/
 program ::= PROGRAM ID SCOLON decl_list:dl compound_stmt:cs {:
 	System.out.println("-----------");
-	String regras = new String("program -> program ID decl_list compound_stmt\n" + dl + cs);
+	String regras = new String("program -> program ID decl_list compound_stmt" );
 	//String regras = new String("programI -> program\n" + p);
-	System.out.print(regras);
+	System.out.println(regras);
 :};
 decl_list ::= decl_list:dl SCOLON  decl:dc {:
-		String RESULTADO = new String("decl_list -> decl_list ; decl\n" + dl+ dc);
+		String RESULTADO = new String("decl_list -> decl_list ; decl" );
+		System.out.println(RESULTADO);
 	:}
 	| decl:dc {:
-		String RESULTADO = new String("decl_list -> decl\n" + dc);
+		String RESULTADO = new String("decl_list -> decl");
+		System.out.println(RESULTADO);
 	:};
 decl ::= dcl_var:dv {:
-		String RESULTADO = new String("decl -> decl_var\n" + dv);	
+		String RESULTADO = new String("decl -> decl_var" );	
+		System.out.println(RESULTADO);
 	:}
 	| dcl_proc:dp {:
-		String RESULTADO = new String("decl -> decl_proc\n" + dp);
+		String RESULTADO = new String("decl -> decl_proc" );
+		System.out.println(RESULTADO);
 	:};
 dcl_var ::= indent_list:il COLON type:t {:
-	String RESULTADO = new String("dcl_var -> ident_list : type\n"+il+t);
+	String RESULTADO = new String("dcl_var -> ident_list : type");
+	System.out.println(RESULTADO);
 :};
  indent_list ::= indent_list:il COMMA ID {:
-		String RESULTADO =  new String("indent_list ->   : id\n" + il);
+		String RESULTADO =  new String("indent_list ->   : id" );
+		System.out.println(RESULTADO);
 	:}	
 	|	ID {:
-			String RESULTADO = new String("indent_list -> id\n");	
+			String RESULTADO = new String("indent_list -> id");	
+			System.out.println(RESULTADO);
 	:};		
 type ::= INT {:
-		String RESULTADO = new String("type -> integer\n");
+		String RESULTADO = new String("type -> integer");
+		System.out.println(RESULTADO);
 	:}	
 	| REAL {:
-		String RESULTADO = new String("type -> real\n");	
+		String RESULTADO = new String("type -> real");	
+		System.out.println(RESULTADO);
 	:}
 	| BOOLEAN {:
-		String RESULTADO = new String("type -> boolean\n");
+		String RESULTADO = new String("type -> boolean");
+		System.out.println(RESULTADO);
 	:}
 	| CHAR {:
-		String RESULTADO = new String("type -> char\n");
+		String RESULTADO = new String("type -> char");
+		System.out.println(RESULTADO);
 	:};
 dcl_proc ::= tipo_retornado:tr PROCEDURE ID espec_parametros:ep corpo:c {:
-		String RESULTADO = new String("dcl_proc -> tipo_retornado procedure id espec_parametros\n" +tr+ep+c);
+		String RESULTADO = new String("dcl_proc -> tipo_retornado procedure id espec_parametros");
+		System.out.println(RESULTADO);
 	:};	 
 
 tipo_retornado ::= INT {:
-		String RESULTADO = new String("type -> integer\n");
+		String RESULTADO = new String("type -> integer");
+		System.out.println(RESULTADO);
 	:}	
 	| REAL {:
-		String RESULTADO = new String("type -> real\n");	
+		String RESULTADO = new String("type -> real");	
+		System.out.println(RESULTADO);
 	:}
 	| BOOLEAN {:
-		String RESULTADO = new String("type -> boolean\n");
+		String RESULTADO = new String("type -> boolean");
+		System.out.println(RESULTADO);
 	:}
 	| CHAR {:
-		String RESULTADO = new String("type -> char\n");
+		String RESULTADO = new String("type -> char");
+		System.out.println(RESULTADO);
 	:}
 	| /* vazio */ {:
-			String RESULTADO = new String("tipo_retornado -> \n\n");	
+			String RESULTADO = new String("tipo_retornado -> ");	
+			System.out.println(RESULTADO);	
 	:};
 corpo ::= COLON decl_list:dl SCOLON compound_stmt:cs id_return:ir {:
-		String RESULTADO = new String("corpo -> : decl_list ; compound_stmt id_return\n" + dl+cs+ir);
+		String RESULTADO = new String("corpo -> : decl_list ; compound_stmt id_return" );
+		System.out.println(RESULTADO);
 	:}
 	| /* vazio */ {:
-		String RESULTADO = new String("corpo -> \n\n");
+		String RESULTADO = new String("corpo -> ");
+		System.out.println(RESULTADO);
 	:};
 id_return ::= ID {:
-		String RESULTADO = new String("id_return -> id\n");
+		String RESULTADO = new String("id_return -> id");
+		System.out.println(RESULTADO);
 	:}
 	| 	/* vazio */ {:
-		String RESULTADO = new String("id_return -> \n\n");
+		String RESULTADO = new String("id_return -> ");
+		System.out.println(RESULTADO);
 	:};
 
 espec_parametros ::= LFPAREN lista_de_parametros:lp RTPAREN {:
-		String RESULTADO = new String("espec_parametros -> ( lista_de_parametros )\n"+ lp);
+		String RESULTADO = new String("espec_parametros -> ( lista_de_parametros )");
+		System.out.println(RESULTADO);
 	:};
 lista_de_parametros ::= parametro:p {:
-		String RESULTADO = new String("lista_de_parametros -> parametro\n"+ p);
+		String RESULTADO = new String("lista_de_parametros -> parametro");
+		System.out.println(RESULTADO);
 	:}
 	| lista_de_parametros:lp COMMA parametro:p {:
-		String RESULTADO = new String("lista_de_parametros -> lista_de_parametros , parametro\n"+ lp+ p);
+		String RESULTADO = new String("lista_de_parametros -> lista_de_parametros , parametro");
+		System.out.println(RESULTADO);
 	:}; 
 parametro ::= modo:m type:t COLON ID {:
-		String RESULTADO = new String("parametro -> modo type : id\n"+m+t);
+		String RESULTADO = new String("parametro -> modo type : id");
+		System.out.println(RESULTADO);
 	:};
 modo ::= VALUE {:
-		String RESULTADO = new String("modo -> value\n");
+		String RESULTADO = new String("modo -> value");
+		System.out.println(RESULTADO);
 	:}
 	| REFERENCE {:
-		String RESULTADO = new String("modo -> reference\n");
+		String RESULTADO = new String("modo -> reference");
+		System.out.println(RESULTADO);
 	:};
 compound_stmt ::= BEGIN stmt_list:sl END {:
-		String RESULTADO = new String("compound_stmt -> begin stmt_list end\n"+sl);
+		String RESULTADO = new String("compound_stmt -> begin stmt_list end");
+		System.out.println(RESULTADO);
 	:};
-stmt_list ::= stmt_list:sl SCOLON stmt:s {:
-		String RESULTADO = new String("stmt_list -> stmt_list ; stmt\n"+sl+s);
+stmt_list ::= stmt_list:sl SCOLON stmt:s  {:
+		String RESULTADO = new String("stmt_list -> stmt_list ; stmt");
+		System.out.println(RESULTADO);
 	:} 
 	| stmt:s {:
-		String RESULTADO = new String("stmt_list -> stmt\n"+s);
-	:}
-	| /*vazio*/ {:
-		String RESULTADO = new String("stmt_list -> \n\n");
+		String RESULTADO = new String("stmt_list -> stmt");
+		System.out.println(RESULTADO);
 	:};
-
+	
 stmt ::= assign_stmt:as {:
-		String RESULTADO = new String("stmt -> assign_stmt\n"+as);
+		String RESULTADO = new String("stmt -> assign_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| if_stmt:is {:
-		String RESULTADO = new String("stmt -> if_stmt\n"+is);
+		String RESULTADO = new String("stmt -> if_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| repeat_stmt:rs {:
-		String RESULTADO = new String("stmt -> repeat_stmt\n"+ rs);
+		String RESULTADO = new String("stmt -> repeat_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| read_stmt:rds {:
-		String RESULTADO = new String("stmt -> read_stmt\n"+rds);
+		String RESULTADO = new String("stmt -> read_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| write_stmt:ws {:
-		String RESULTADO = new String("stmt -> write_stmt\n"+ ws);
+		String RESULTADO = new String("stmt -> write_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| compound_stmt:cs {:
-		String RESULTADO = new String("stmt -> compound_stmt\n"+cs);
+		String RESULTADO = new String("stmt -> compound_stmt");
+		System.out.println(RESULTADO);
 	:}
 	| function_ref_par:frp {:
-		String RESULTADO = new String("stmt -> function_ref_par\n"+frp);
+		String RESULTADO = new String("stmt -> function_ref_par");
+		System.out.println(RESULTADO);
 	:};
+	
 assign_stmt ::= ID ASSIGN expr:e {:
-		String RESULTADO = new String("assign_stmt -> id := expr\n"+e);
+		String RESULTADO = new String("assign_stmt -> id := expr");
+		System.out.println(RESULTADO);
 	:};
 if_stmt ::= IF cond:c THEN stmt:s {:
-		String RESULTADO = new String("if_stmt -> if cond then stmt\n"+c+s);
+		String RESULTADO = new String("if_stmt -> if cond then stmt");
+		System.out.println(RESULTADO);
 	:}
 	| IF cond:c THEN stmt:s1 ELSE stmt:s2 {:
-			String RESULTADO = new String("if_stmt -> if cond then stmt else stmt\n"+c+s1+s2);
+			String RESULTADO = new String("if_stmt -> if cond then stmt else stmt\n");
+			System.out.println(RESULTADO);
 	:};
 cond ::= expr:e {:
-		String RESULTADO = new String("cond -> expr\n"+e);
+		String RESULTADO = new String("cond -> expr");
+		System.out.println(RESULTADO);
 	:};
 repeat_stmt ::= REPEAT stmt_list:st UNTIL expr:e {:
-		String RESULTADO = new String("repeat_stmt -> repeat stmt_list until expr\n"+st+e);
+		String RESULTADO = new String("repeat_stmt -> repeat stmt_list until expr");
+		System.out.println(RESULTADO);
 	:};
 read_stmt ::= READ LFPAREN indent_list:il RTPAREN {:
-		String RESULTADO = new String("read_stmt -> read(  )\n"+il);
+		String RESULTADO = new String("read_stmt -> read(  )");
+		System.out.println(RESULTADO);
 	:};
 write_stmt ::= WRITE LFPAREN expr_list:el RTPAREN	{:
-		String RESULTADO = new String("write_stmt -> ( expr_list )\n"+el);
+		String RESULTADO = new String("write_stmt -> ( expr_list )");
+		System.out.println(RESULTADO);
 	:};
 expr_list ::= expr:e {:
-		String RESULTADO = new String("expr_list -> expr\n"+e);
+		String RESULTADO = new String("expr_list -> expr");
+		System.out.println(RESULTADO);
 	:}
 	| expr_list:el COMMA expr:e {:
-		String RESULTADO = new String("expr_list -> expr_list , expr\n"+el+e);
+		String RESULTADO = new String("expr_list -> expr_list , expr");
+		System.out.println(RESULTADO);
 	:};
 expr ::= Simple_expr:se {:
-		String RESULTADO = new String("expr -> Simple_expr\n"+se);
+		String RESULTADO = new String("expr -> Simple_expr");
+		System.out.println(RESULTADO);
 	:}
 	| Simple_expr:se1 LE Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr LE Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr LE Simple_expr ");
+		System.out.println(RESULTADO);
 	:} 
 	| Simple_expr:se1 LT Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr LT Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr LT Simple_expr ");
+		System.out.println(RESULTADO);
 	:} 
 	| Simple_expr:se1 GE Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr GE Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr GE Simple_expr ");
+		System.out.println(RESULTADO);
 	:} 
 	| Simple_expr:se1 GT Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr GT Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr GT Simple_expr ");
+		System.out.println(RESULTADO);
 	:} 
 	| Simple_expr:se1 EQ Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr EQ  Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr EQ  Simple_expr ");
+		System.out.println(RESULTADO);
 	:} 
 	| Simple_expr:se1 NQ Simple_expr:se2 {:
-		String RESULTADO = new String("expr -> Simple_expr NQ Simple_expr \n"+se1+se2);
+		String RESULTADO = new String("expr -> Simple_expr NQ Simple_expr ");
+		System.out.println(RESULTADO);
 	:}; 
 
 Simple_expr ::= term:t {:
-			String RESULTADO = new String("Simple_expr -> term\n"+t);
+			String RESULTADO = new String("Simple_expr -> term");
+			System.out.println(RESULTADO);
 	:}
 	| Simple_expr:se PLUS term:t {:
-		String RESULTADO = new String("Simple_expr -> Simple_expr + term"+se+t);
+		String RESULTADO = new String("Simple_expr -> Simple_expr + term");
+		System.out.println(RESULTADO);
 	:}
 	| Simple_expr:se MINUS term:t {:
-		String RESULTADO = new String("Simple_expr -> Simple_expr - term"+se+t);
+		String RESULTADO = new String("Simple_expr -> Simple_expr - term");
+		System.out.println(RESULTADO);
 	:}
 	| Simple_expr:se OR term:t {:
-		String RESULTADO = new String("Simple_expr -> Simple_expr or term"+se+t);
+		String RESULTADO = new String("Simple_expr -> Simple_expr or term");
+		System.out.println(RESULTADO);
 	:};
 term ::= factor_a:fa {:
-		String RESULTADO = new String("term -> factor_a\n"+fa);
+		String RESULTADO = new String("term -> factor_a");
+		System.out.println(RESULTADO);
 	:}
 	| term:t MUL factor_a:fa {:
-		String RESULTADO = new String("term -> term * factor_a\n"+t+fa);
+		String RESULTADO = new String("term -> term * factor_a");
+		System.out.println(RESULTADO);
 	:}
 	| term:t DIV factor_a:fa {:
-		String RESULTADO = new String("term -> term / factor_a\n"+t+fa);
+		String RESULTADO = new String("term -> term / factor_a");
+		System.out.println(RESULTADO);
 	:}
 	| term:t AND factor_a:fa {:
-		String RESULTADO = new String("term -> term and factor_a\n"+t+fa);
+		String RESULTADO = new String("term -> term and factor_a");
+		System.out.println(RESULTADO);
 	:}
 	| term:t MOD factor_a:fa {:
-		String RESULTADO = new String("term -> term mod factor_a\n"+t+fa);
+		String RESULTADO = new String("term -> term mod factor_a");
+		System.out.println(RESULTADO);
 	:};
 	
 factor_a ::= MINUS factor:f {:
-	String RESULTADO = new String("factor_a -> - factor\n"+f);
+	String RESULTADO = new String("factor_a -> - factor");
+	System.out.println(RESULTADO);
 :}
 | factor:f {:
-	String RESULTADO = new String("factor_a -> factor\n"+f);
+	String RESULTADO = new String("factor_a -> factor");
+	System.out.println(RESULTADO);
 :};
 
 factor ::= ID {:
 	String RESULTADO = new String("factor -> id");
+	System.out.println(RESULTADO);
 :}
 | constant:c {:
-	String RESULTADO = new String("factor -> constant\n");
+	String RESULTADO = new String("factor -> constant");
+	System.out.println(RESULTADO);
 :} 
 | LFPAREN expr:e RTPAREN {:
-	String RESULTADO = new String("factor -> ( expr )\n"+e);
+	String RESULTADO = new String("factor -> ( expr )");
+	System.out.println(RESULTADO);
 :}
 | NOT factor:f {:
-	String RESULTADO = new String("factor -> not factor\n"+f);
+	String RESULTADO = new String("factor -> not factor");
+	System.out.println(RESULTADO);
 :}
 | function_ref_par:frp {:
-	String RESULTADO = new String("factor -> function_ref_par\n"+frp);
+	String RESULTADO = new String("factor -> function_ref_par");
+	System.out.println(RESULTADO);
 :};
 
 Simple_variable_or_proc ::= ID {:
-	String RESULTADO = new String("Simple_variable_or_proc -> id\n");
+	String RESULTADO = new String("Simple_variable_or_proc -> id");
+	System.out.println(RESULTADO);
 :};
 
 function_ref_par ::= variable:v LFPAREN expr_list:el RTPAREN {:
-	String RESULTADO = new String("function_ref_par -> varialbe (expr_list)"+v+el);
+	String RESULTADO = new String("function_ref_par -> varialbe (expr_list)");
+	System.out.println(RESULTADO);
 :};
 variable ::= Simple_variable_or_proc {:
-	String RESULTADO = new String("variable -> Simple_variable_or_proc\n");
+	String RESULTADO = new String("variable -> Simple_variable_or_proc");
+	System.out.println(RESULTADO);
 :};
 
 constant ::= INTT {:
-	String RESULTADO = new String("constant -> integer_constant\n");
+	String RESULTADO = new String("constant -> integer_constant");
+	System.out.println(RESULTADO);
+
 :}
 | REALT {:
-	String RESULTADO = new String("constant -> real_constant\n");
+	String RESULTADO = new String("constant -> real_constant");
+	System.out.println(RESULTADO);
+
 :}
 | boolean_constant:bc {:
-	String RESULTADO = new String("constant -> boolean_constant\n"+bc);
+	String RESULTADO = new String("constant -> boolean_constant");
+	System.out.println(RESULTADO);
+
 :}
 | CHART {:
-	String RESULTADO = new String("constant -> char_constant\n");
+	String RESULTADO = new String("constant -> char_constant");
+	System.out.println(RESULTADO);
+
 :};
 
 boolean_constant ::= FALSE {:
-	String RESULTADO = new String("boolean_constant -> false\n");
+	String RESULTADO = new String("boolean_constant -> false");
+	System.out.println(RESULTADO);
+
 :}
 | TRUE {:
-	String RESULTADO = new String("boolean_constant -> true\n");
+	String RESULTADO = new String("boolean_constant -> true");
+	System.out.println(RESULTADO);
+
 :};
 
